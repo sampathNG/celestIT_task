@@ -12,12 +12,12 @@ const {
 } = require("../controllers/teamController");
 const authAdmin = require("../utils/authorization");
 const auth = require("../utils/authentication");
-router.post("/team", auth, authAdmin, createTeam);
-router.get("/team/all", auth, getTeams);
+router.post("/create", authAdmin, createTeam);
+router.get("/team/all", getTeams);
 router.get("/team/:id", auth, getTeamById);
-router.put("/team/:id", auth, authAdmin, updateTeam);
-router.delete("/:idl/team/:idr", auth, authAdmin, deleteTeam);
-router.delete("/team/:id", authAdmin, deleteMany);
+router.put("/update/:id", authAdmin, updateTeam);
+router.delete("/:idl/delete/:idr", authAdmin, deleteTeam);
+router.delete("/deleted", authAdmin, deleteMany);
 router.post("/join/:id", auth, joinTeam);
 router.post("/leave/:id", auth, leaveTeam);
 module.exports = router;

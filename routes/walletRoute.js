@@ -10,11 +10,11 @@ const {
 } = require("../controllers/walletController");
 const authAdmin = require("../utils/authorization");
 const auth = require("../utils/authentication");
-router.post("/wallets", auth, createwallet);
-router.get("/wallets/all", authAdmin, getwallets);
-router.get("/walletsd", auth, getwalletById);
+router.post("/create", auth, createwallet);
+router.get("/get/all", authAdmin, getwallets);
+router.get("/get", auth, getwalletById);
 // update balance on basis of referals
-router.put("/walletsu", auth, updatewallet);
-router.delete("/wallets", auth, deletewallet);
-router.delete("/walletd", authAdmin, deleteMany);
+router.put("/update", auth, updatewallet);
+router.delete("/delete", auth, deletewallet);
+router.delete("/deleted", authAdmin, deleteMany);
 module.exports = router;

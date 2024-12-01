@@ -24,19 +24,19 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 const userRoutes = require("./routes/userRoute");
-app.use("/", userRoutes);
+app.use("/user", userRoutes);
 const walletRoutes = require("./routes/walletRoute");
-app.use("/", walletRoutes);
+app.use("/wallet", walletRoutes);
 const leaderRoutes = require("./routes/leaderRoute");
-app.use("/", leaderRoutes);
+app.use("/leader", leaderRoutes);
 const teamRoutes = require("./routes/teamRoute");
-app.use("/", teamRoutes);
+app.use("/team", teamRoutes);
 const leagueRoutes = require("./routes/leagueRoute");
-app.use("/", leagueRoutes);
+app.use("/league", leagueRoutes);
 const subscriptionRoutes = require("./routes/subscriptionRoute");
-app.use("/", subscriptionRoutes);
+app.use("/subscription", subscriptionRoutes);
 const tournamentRoutes = require("./routes/tournamentRoute");
-app.use("/t", tournamentRoutes);
+app.use("/tournament", tournamentRoutes);
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
 });

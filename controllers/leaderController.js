@@ -1,6 +1,16 @@
-const leader = require("../models/leaderBoardModel");
+// const leader = require("../models/leaderBoardModel");
+const LeaderBoard = require("../models/leaderBoardModel");
+
 const User = require("../models/userModel");
 const wallet = require("../models/walletModel");
+const deleteMany = async (req, res) => {
+  try {
+    const leaders = await LeaderBoard.deleteMany();
+    res.status(200).json("deleted all leader boards");
+  } catch (error) {
+    res.status(409).json({ message: error.message });
+  }
+};
 const createleader = async (req, res) => {
   try {
     const newleader = await User.aggregate([
@@ -33,7 +43,7 @@ const createleader = async (req, res) => {
         $sort: { score: -1 },
       },
     ]);
-    const leaderBoardEntry = new leader({
+    const leaderBoardEntry = new LeaderBoard({
       score: newleader,
       date: new Date(),
     });
@@ -45,7 +55,7 @@ const createleader = async (req, res) => {
 };
 const getleader = async (req, res) => {
   try {
-    const leaders = await leader.find().sort({ score: -1 });
+    const leaders = await LeaderBoard.find().sort({ score: -1 });
     res.status(200).json(leaders);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -53,7 +63,7 @@ const getleader = async (req, res) => {
 };
 const getleaderById = async (req, res) => {
   try {
-    const leader = await leader.findById(req.params.id);
+    const leader = await LeaderBoard.findById(req.params.id);
     res.status(200).json(leader);
   } catch (error) {
     res.status(404).json({ message: error.message });
@@ -62,13 +72,7 @@ const getleaderById = async (req, res) => {
 const updateleader = async (req, res) => {
   try {
     const id = req.params.id;
-    const { name, email, score } = req.body;
-    const updatedleader = {
-      name,
-      email,
-      score,
-    };
-    const leader = await leader.findByIdAndUpdate(id, updatedleader, {
+    const leader = await LeaderBoard.findByIdAndUpdate(id, req.body, {
       new: true,
     });
     res.status(200).json(leader);
@@ -78,10 +82,9 @@ const updateleader = async (req, res) => {
 };
 const deleteleader = async (req, res) => {
   try {
-    // const id = req.params.id;
-    // const leader = await leader.findByIdAndDelete(id);
-    await leader.deleteMany();
-    res.status(200).json(leader);
+    const id = req.params.id;
+    const leader = await LeaderBoard.findByIdAndDelete(id);
+    res.status(200).json("deleted");
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
@@ -92,4 +95,5 @@ module.exports = {
   getleaderById,
   updateleader,
   deleteleader,
+  deleteMany,
 };

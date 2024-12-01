@@ -132,14 +132,15 @@ const leaveTeam = async (req, res) => {
 };
 const deleteMany = async (req, res) => {
   try {
-    const leagueId = req.params.id;
-    const league = await League.findById(leagueId);
-    if (!league) {
-      return res.status(404).json({ error: "League not found" });
-    }
-    const deletedTeams = await Team.deleteMany({ _id: { $in: league.team } });
-    league.team = [];
-    await league.save();
+    // const leagueId = req.params.id;
+    // const league = await League.findById(leagueId);
+    // if (!league) {
+    //   return res.status(404).json({ error: "League not found" });
+    // }
+    // const deletedTeams = await Team.deleteMany({ _id: { $in: league.team } });
+    // league.team = [];
+    // await league.save();
+    await Team.deleteMany();
     res.status(200).json("all teams deleted");
   } catch (error) {
     res.status(409).json({ message: error.message });

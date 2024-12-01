@@ -1,4 +1,4 @@
-const league = require("../models/leagueModel");
+const League = require("../models/leagueModel");
 const User = require("../models/userModel");
 const Wallet = require("../models/walletModel");
 const createleague = async (req, res) => {

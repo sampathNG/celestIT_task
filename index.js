@@ -12,8 +12,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+URL = "mongodb+srv://ramuksampath5:passwords@cluster0.h9swq.mongodb.net/";
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(URL)
   .then(() => {
     console.log("Connected to MongoDB");
   })

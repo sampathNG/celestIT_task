@@ -4,6 +4,7 @@ const teamSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     players: {
       type: Array,
@@ -24,6 +25,10 @@ const teamSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 3375,
+    },
+    league: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "League",
     },
   },
   {

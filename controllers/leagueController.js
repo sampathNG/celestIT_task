@@ -83,10 +83,10 @@ const joinLeague = async (req, res) => {
     if (!updatedWallet) {
       return res.status(404).json({ error: "Wallet not found" });
     }
-    const ids = req.user.id;
+    const ids = req.params.id;
     const updateUser = await User.findByIdAndUpdate(
       user._id,
-      { $addToSet: { league: ids } },
+      { $addToSet: { league: id } },
       { new: true }
     );
     if (!updateUser) {

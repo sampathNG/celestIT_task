@@ -17,5 +17,5 @@ router.get("/get/all", authAdmin, getUsers);
 router.get("/get/:id", auth, getUserById);
 router.put("/update/:id", auth, updateUser);
 router.delete("/delete/:id", auth, deleteUser);
-router.delete("/deleted", authAdmin, deleteMany);
+router.delete("/delete/all", authAdmin, deleteMany);
 module.exports = router;

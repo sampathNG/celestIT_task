@@ -16,5 +16,5 @@ router.get("/get", auth, getwalletById);
 // update balance on basis of referals
 router.put("/update", auth, updatewallet);
 router.delete("/delete", auth, deletewallet);
-router.delete("/deleted", authAdmin, deleteMany);
+router.delete("/delete/all", authAdmin, deleteMany);
 module.exports = router;

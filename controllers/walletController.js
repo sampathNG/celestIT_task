@@ -59,11 +59,13 @@ const updatewallet = async (req, res) => {
   if (!id) {
     return res.status(404).json({ message: "Wallet not found for this user" });
   }
-  var { balance, referEarned } = req.body;
-  balance = referEarned + balance;
+  const walletDoc = await wallet.findById(id);
+  // var { balance, referEarned } = req.body;
+  // console.log(req.body);
+  const balances = req.body.referEarned + walletDoc.balance;
   const updatedwallet = {
-    balance,
-    referEarned,
+    balance: balances,
+    referEarned: req.body.refEarned,
   };
   try {
     const walletrs = await wallet.findByIdAndUpdate(id, updatedwallet, {

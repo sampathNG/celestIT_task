@@ -6,7 +6,6 @@ const {
   deleteTournament,
   joinTournament,
   leaveTournament,
-  getTournamentStatus,
   deleteManyTournments,
 } = require("../controllers/tournamentController.js");
 const router = require("express").Router();
@@ -17,8 +16,7 @@ router.get("/get", auth, getTournaments);
 router.get("/get/:id", auth, getTournamentById);
 router.put("/update/:id", authAdmin, updateTournament);
 router.delete("/delete/:id", authAdmin, deleteTournament);
-router.delete("/deleted", authAdmin, deleteManyTournments);
-router.post("/join/:id", auth, joinTournament);
-router.post("/leave/:id", auth, leaveTournament);
-router.get("/status/:id", auth, getTournamentStatus);
+router.delete("/delete/all", authAdmin, deleteManyTournments);
+router.get("/join/:id", auth, joinTournament);
+router.get("/leave/:id", auth, leaveTournament);
 module.exports = router;

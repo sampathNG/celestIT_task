@@ -58,10 +58,10 @@ const deleteTournament = async (req, res) => {
 const joinTournament = async (req, res) => {
   try {
     const tournament = await Tournament.findById(req.params.id);
-    const ids = req.params.id;
     if (!tournament) {
       return res.status(404).json({ error: "Tournament not found" });
     }
+    const ids = req.params.id;
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });

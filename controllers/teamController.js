@@ -3,19 +3,24 @@ const User = require("../models/userModel");
 const League = require("../models/leagueModel");
 const createTeam = async (req, res) => {
   try {
-    const id = req.params.id;
     const newTeam = new Team(req.body);
+    const league = await League.findById({ _id: req.params.id });
+    if (!league) {
+      return res.status(404).json({ error: "League not found" });
+    }
     const teamr = await newTeam.save();
     if (!teamr) {
       return res.status(400).json({ error: "team not saved" });
     }
     const ids = teamr._id;
-    const league = await League.findById(id);
+    const teams = await Team.findByIdAndUpdate(
+      { _id: ids },
+      { league: req.params.id },
+      { new: true }
+    );
     league.team.push(ids);
-    if (!league) {
-      return res.status(404).json({ error: "League not found" });
-    }
-    res.status(201).json(teamr);
+    await league.save();
+    res.status(201).json(teams);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
@@ -48,8 +53,8 @@ const updateTeam = async (req, res) => {
 };
 const deleteTeam = async (req, res) => {
   try {
-    const id = req.params.idl;
-    const ids = req.params.idr;
+    const ids = req.params.idl;
+    const id = req.params.idr;
     const teamr = await Team.findByIdAndDelete(id);
     if (!teamr) {
       return res.status(404).json({ error: "team not found" });
@@ -70,7 +75,7 @@ const joinTeam = async (req, res) => {
     if (!teams) {
       return res.status(404).json({ error: "teams not found" });
     }
-    const users = await user.findById(req.user.id);
+    const users = await User.findById(req.user.id);
     if (!users) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -84,8 +89,8 @@ const joinTeam = async (req, res) => {
     teams.currentNumberOfPlayers += 1;
     const ids = req.user.id;
     const updateUser = await User.findByIdAndUpdate(
-      user._id,
-      { $addToSet: { team: ids } },
+      ids,
+      { $addToSet: { team: req.params.id } },
       { new: true }
     );
     if (!updateUser) {
@@ -99,25 +104,25 @@ const joinTeam = async (req, res) => {
 };
 const leaveTeam = async (req, res) => {
   try {
-    const teams = await team.findById(req.params.id);
+    const teams = await Team.findById(req.params.id);
     if (!teams) {
       return res.status(404).json({ error: "teams not found" });
     }
-    const users = await user.findById(req.user.id);
+    const users = await User.findById(req.user.id);
     if (!users) {
       return res.status(404).json({ error: "User not found" });
     }
     const ids = req.user.id;
-    if (!teams.players.includes(user._id)) {
+    if (!teams.players.includes(users._id)) {
       return res.status(400).json({ error: "User not joined" });
     }
     const initialPlayerCount = teams.players.length;
-    teams.players.pull(user._id);
+    teams.players.pull(users._id);
     if (teams.players.length < initialPlayerCount) {
       teams.currentNumberOfPlayers -= 1;
     }
     const updateUser = await User.findByIdAndUpdate(
-      user._id,
+      users._id,
       { $pull: { team: ids } },
       { new: true }
     );
@@ -132,14 +137,6 @@ const leaveTeam = async (req, res) => {
 };
 const deleteMany = async (req, res) => {
   try {
-    // const leagueId = req.params.id;
-    // const league = await League.findById(leagueId);
-    // if (!league) {
-    //   return res.status(404).json({ error: "League not found" });
-    // }
-    // const deletedTeams = await Team.deleteMany({ _id: { $in: league.team } });
-    // league.team = [];
-    // await league.save();
     await Team.deleteMany();
     res.status(200).json("all teams deleted");
   } catch (error) {

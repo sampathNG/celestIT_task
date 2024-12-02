@@ -66,10 +66,19 @@ const deleteMany = async (req, res) => {
 };
 const takeSubscription = async (req, res) => {
   try {
-    const _id = req.params.id;
-    const subscription = await Subscription.findById(_id);
+    const id = req.params.id;
+    const subscription = await Subscription.findById(id);
+    if (!subscription) {
+      return res.status(404).json({ message: "Subscription not found" });
+    }
     const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     const wallet = await Wallet.findById(user.wallet);
+    if (!wallet) {
+      return res.status(404).json({ message: "Wallet not found" });
+    }
     const balance = wallet.balance;
     const price = subscription.price;
     if (balance < price) {
@@ -98,10 +107,17 @@ const takeSubscription = async (req, res) => {
 };
 const cancelSubscription = async (req, res) => {
   try {
+    const id = req.params.id;
     const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     const wallet = await Wallet.findById(user.wallet);
+    if (!wallet) {
+      return res.status(404).json({ message: "Wallet not found" });
+    }
     const balance = wallet.balance;
-    const subscription = await Subscription.findById(user.subscription);
+    const subscription = await Subscription.findById(id);
     if (!subscription) {
       return res.status(404).json({ message: "Subscription not found" });
     }
@@ -158,7 +174,7 @@ const getSubscriptionByUser = async (req, res) => {
     if (!subscription) {
       return res.status(404).json({ message: "Subscription not found" });
     }
-    res.status(200).json(subscription);
+    res.status(200).json(subscription.name);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }

@@ -75,18 +75,25 @@ const getUserById = async (req, res) => {
   }
 };
 const updateUser = async (req, res) => {
-  const id = req.params.id;
-  const { name, email, phone, password } = req.body;
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-  const updatedUser = {
-    name,
-    email,
-    phone,
-    password: hashedPassword,
-  };
   try {
-    const userrs = await user.findByIdAndUpdate(id, updatedUser, { new: true });
+    const id = req.params.id;
+    const { name, phone, password } = req.body;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const updatedUser = {
+        name,
+        phone,
+        password: hashedPassword,
+      };
+      const userrs = await user.findByIdAndUpdate(id, updatedUser, {
+        new: true,
+      });
+    }
+    const userrs = await user.findByIdAndUpdate(id, req.body, { new: true });
+    if (!userrs) {
+      return res.status(404).json({ message: "User not updated" });
+    }
     res.status(200).json(userrs);
   } catch (error) {
     res.status(409).json({ message: error.message });
